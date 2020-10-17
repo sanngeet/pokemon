@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 import { hs } from '../app.utility';
 
@@ -10,7 +11,12 @@ import { PokemonService } from '../service/pokemon.service';
   styleUrls: ['./pokemon.component.scss'],
 })
 export class PokemonComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private pokemon: PokemonService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private pokemon: PokemonService,
+    private title: Title,
+    private meta: Meta
+  ) {}
 
   id: string;
   details: any = {};
@@ -31,6 +37,31 @@ export class PokemonComponent implements OnInit {
   private fetch() {
     this.pokemon.details(this.id).subscribe((res) => {
       this.details = res;
+
+      const img: string =
+        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' +
+        this.id +
+        '.png';
+
+      const url = window.location.href;
+
+      // General meta tags
+      this.title.setTitle(res.name);
+      this.meta.updateTag({
+        name: 'description',
+        content: res.name + 'This is dynamic content.',
+      });
+
+      // Facebook tags
+      this.meta.updateTag({ property: 'og:type', content: 'article' });
+      this.meta.updateTag({ property: 'og:site_name', content: res.name });
+      this.meta.updateTag({ property: 'og:title', content: res.name });
+      this.meta.updateTag({ property: 'og:image', content: img });
+      this.meta.updateTag({ property: 'og:url', content: url });
+      this.meta.updateTag({
+        property: 'og:description',
+        content: res.name + ' article description',
+      });
     });
 
     this.pokemon.about(this.id).subscribe((res) => {
