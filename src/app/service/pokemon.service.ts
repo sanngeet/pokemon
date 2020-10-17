@@ -14,7 +14,7 @@ export interface PokemonList {
 export class PokemonService {
   constructor(private http: HttpClient) {}
 
-  list(page: number = 0, limit: number = 20): Observable<Array<any>> {
+  list(page: number = 0, limit: number = 100): Observable<Array<any>> {
     return this.http
       .get(`https://pokeapi.co/api/v2/pokemon?offset=${page}&limit=${limit}`)
       .pipe(map((response: any) => response.results));

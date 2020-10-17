@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
 
   result: Array<PokemonList> = [];
   page = 0;
-  limit = 50;
+  limit = 100;
 
   loading = false;
 
